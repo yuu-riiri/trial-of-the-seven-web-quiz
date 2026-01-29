@@ -17,6 +17,11 @@ const questionText = document.getElementById("question-text");
 const answersContainer = document.getElementById("answers");
 const resultText = document.getElementById("result-text");
 
+// PROGRESS - BAR
+const progressBar = document.getElementById("progress-bar");
+const progressText = document.getElementById("progress-text");
+
+
 // TRACKS WHEN ANSWER IS SELECTED
 let answerSelected = false;
 
@@ -229,12 +234,19 @@ function showQuestion() {
   selectedTraits = null;
   nextBtn.disabled = true;
 
-
   answersContainer.innerHTML = "";
   nextBtn.style.display = "none";
 
   const current = questions[currentQuestion];
   questionText.textContent = current.question;
+
+  // Progress calculation
+  const currentStep = currentQuestion + 1;
+  const totalSteps = questions.length;
+  const progressPercent = (currentStep / totalSteps) * 100;
+
+  progressBar.style.width = progressPercent + "%";
+  progressText.textContent = `${currentStep} / ${totalSteps}`;
 
   current.answers.forEach(answer => {
     const btn = document.createElement("button");
@@ -242,21 +254,23 @@ function showQuestion() {
 
     btn.addEventListener("click", () => {
 
-  if (answerSelected) return;
+      document.querySelectorAll("#answers button")
+        .forEach(b => b.classList.remove("selected"));
 
-  selectedTraits = answer.traits;
+      btn.classList.add("selected");
 
-answerSelected = true;
-nextBtn.disabled = false;
-nextBtn.style.display = "block";
+      selectedTraits = answer.traits;
+      answerSelected = true;
 
-
-});
-
+      nextBtn.disabled = false;
+      nextBtn.style.display = "block";
+    });
 
     answersContainer.appendChild(btn);
   });
 }
+
+
 
 // APPLY TRAITS
 function applyTraits(traitData) {
@@ -352,33 +366,51 @@ function calculateGod() {
 // CALCULATED RESULT WITH PERCENTAGE
 function calculateGodWithPercentages() {
 
-  const maxTraitValue = Math.max(...Object.values(traits));
+  // Normalize player's traits by the maximum trait value (avoid divide-by-zero)
+  const maxTraitValue = Math.max(...Object.values(traits), 1);
 
-  let scores = [];
-  let total = 0;
+  const normalizedTraits = Object.fromEntries(
+    Object.entries(traits).map(([k, v]) => [k, v / maxTraitValue])
+  );
 
-  gods.forEach(god => {
-
-    let score = 0;
-
-    for (let trait in god.traits) {
-      const normalized = traits[trait] / maxTraitValue;
-      score += normalized * god.traits[trait];
-    }
-
-    scores.push({ name: god.name, score });
-    total += score;
-
+  // Compute raw scores (dot product between normalized traits and god trait weights)
+  const scores = gods.map(god => {
+    const score = Object.entries(god.traits).reduce((s, [trait, weight]) => {
+      return s + (normalizedTraits[trait] || 0) * weight;
+    }, 0);
+    const maxPossible = Object.values(god.traits).reduce((a, b) => a + b, 0);
+    const matchPercent = maxPossible === 0 ? 0 : (score / maxPossible) * 100;
+    return { name: god.name, score, matchPercent };
   });
 
-  // Convert to percentages
-  scores.forEach(g => {
-    g.percent = total === 0 ? 0 : Math.round((g.score / total) * 100);
-  });
+  const total = scores.reduce((s, g) => s + g.score, 0);
 
-  scores.sort((a, b) => b.score - a.score);
+  // If there's no information, return zeroed percentages (include matchPercent)
+  if (total === 0) {
+    return scores
+      .map(g => ({ name: g.name, score: g.score, percent: 0, matchPercent: Math.round(g.matchPercent || 0) }))
+      .sort((a, b) => b.score - a.score);
+  }
 
-  return scores;
+  // Convert to percentages while ensuring integers sum to 100.
+  const floatPercents = scores.map(g => (g.score / total) * 100);
+  const floored = floatPercents.map(fp => Math.floor(fp));
+  let remainder = 100 - floored.reduce((s, v) => s + v, 0);
+
+  // Distribute remaining percentage points by largest fractional parts
+  const fractions = floatPercents.map((fp, i) => ({ idx: i, frac: fp - Math.floor(fp) }));
+  fractions.sort((a, b) => b.frac - a.frac);
+
+  const finalPercents = floored.slice();
+  for (let i = 0; i < remainder; i++) {
+    finalPercents[fractions[i].idx]++;
+  }
+
+  const results = scores
+    .map((g, i) => ({ name: g.name, score: g.score, percent: finalPercents[i], matchPercent: Math.round(g.matchPercent) }))
+    .sort((a, b) => b.score - a.score);
+
+  return results;
 }
 
 // DISPLAY PORCENTAGE
@@ -435,26 +467,24 @@ function showResult() {
   const results = calculateGodWithPercentages();
 
   const mainGod = results[0];
-  const secondGod = results[1];
-
+  const secondGod = results[1] || { name: "—", matchPercent: 0 };
 
   resultText.innerHTML = `
-  <strong>Your Fate Has Been Decided</strong><br><br>
+    <strong>Your Fate Has Been Decided</strong><br><br>
 
-  Primary Alignment:<br>
-  <span style="color:#caa36a">${mainGod.name}</span> — ${mainGod.percent}%<br><br>
+    Primary Alignment:<br>
+    <span style="color:#caa36a">${mainGod.name}</span> — ${mainGod.matchPercent}%<br><br>
 
-  Secondary Influence:<br>
-  ${secondGod.name} — ${secondGod.percent}%
+    Secondary Influence:<br>
+    ${secondGod.name} — ${secondGod.matchPercent || 0}%
   `;
-
 
   console.log("FINAL TRAITS:", traits);
   console.log("FINAL GOD:", mainGod.name);
 
   displayTraits();
-
 }
+
 
 
 

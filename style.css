@@ -85,4 +85,39 @@ button:hover {
   transition: width 1.2s ease-out;
 }
 
+#answers button.selected {
+  background: linear-gradient(90deg, #c9a23f, #f5d76e);
+  color: #000;
+  transform: scale(1.02);
+}
+
+/* Progress Bar */
+
+#progress-wrapper {
+  margin-bottom: 15px;
+}
+
+#progress-container {
+  width: 100%;
+  height: 10px;
+  background: #222;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+#progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #c9a23f, #f5d76e);
+  transition: width 0.4s ease;
+}
+
+#progress-text {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  color: #aaa;
+  text-align: right;
+}
+
 
