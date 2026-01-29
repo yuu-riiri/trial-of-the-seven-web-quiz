@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trial of the Seven</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -37,31 +38,42 @@
 
   </div>
 
-  <!-- RESULT SCREEN (SEPARATE FROM APP) -->
+
+  <!-- RESULT SCREEN -->
   <div id="result-screen" class="screen">
 
-  <div id="result-layout">
+    <div id="result-layout">
 
-    <!-- LEFT: TRAITS -->
-    <div id="trait-breakdown"></div>
+      <!-- LEFT: TRAITS PANEL -->
+      <div id="trait-breakdown"></div>
 
-    <!-- CENTER: GOD + BUTTON -->
-    <div id="god-column">
 
-      <div id="god-card">
-        <img id="godImage" src="" alt="God Image">
-        <h3>YOU WALK THE PATH OF</h3>
-        <h2 id="godName"></h2>
-        <p id="godDescription"></p>
+      <!-- CENTER: GOD CARD + BUTTON -->
+      <div id="god-column">
+
+        <div id="god-card">
+          <img id="godImage" src="" alt="God Image">
+          <h3>YOU WALK THE PATH OF</h3>
+          <h2 id="godName"></h2>
+          <p id="godDescription"></p>
+        </div>
+
+        <button id="restart-btn" class="retry-btn">Retry Trial</button>
+
       </div>
 
-      <button id="restart-btn" class="retry-btn">Retry Trial</button>
+
+      <!-- RIGHT: LORE PANEL -->
+      <div id="lore-panel">
+        <h3 id="lore-title">Chronicle</h3>
+        <p id="lore-text">
+          The ancient scriptures whisper of this entity...
+        </p>
+      </div>
 
     </div>
 
   </div>
-
-</div>
 
 
   <script src="script.js"></script>
