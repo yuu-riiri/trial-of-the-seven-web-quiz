@@ -6,7 +6,6 @@ const quizScreen = document.getElementById("quiz-screen");
 const resultScreen = document.getElementById("result-screen");
 const traitBreakdown = document.getElementById("trait-breakdown");
 
-
 // BUTTONS
 const startBtn = document.getElementById("start-btn");
 const nextBtn = document.getElementById("next-btn");
@@ -17,18 +16,15 @@ const questionText = document.getElementById("question-text");
 const answersContainer = document.getElementById("answers");
 const resultText = document.getElementById("result-text");
 
-// PROGRESS - BAR
+// PROGRESS
 const progressBar = document.getElementById("progress-bar");
 const progressText = document.getElementById("progress-text");
 
-
-// TRACKS WHEN ANSWER IS SELECTED
+// STATE
 let answerSelected = false;
-
 let selectedTraits = null;
 
-
-// TRAIT SCORES
+// TRAITS
 let traits = {
   WIS: 0,
   CARE: 0,
@@ -39,6 +35,7 @@ let traits = {
   HONOR: 0,
   DARK: 0
 };
+
 
 // QUESTIONS 
 const questions = [
@@ -220,48 +217,39 @@ const questions = [
 
 let currentQuestion = 0;
 
-// START QUIZ
+// START
 startBtn.addEventListener("click", () => {
   startScreen.classList.remove("active");
   quizScreen.classList.add("active");
   showQuestion();
 });
 
-// DISPLAY QUESTION
 function showQuestion() {
-
   answerSelected = false;
   selectedTraits = null;
   nextBtn.disabled = true;
-
-  answersContainer.innerHTML = "";
   nextBtn.style.display = "none";
+  answersContainer.innerHTML = "";
 
   const current = questions[currentQuestion];
   questionText.textContent = current.question;
 
-  // Progress calculation
-  const currentStep = currentQuestion + 1;
-  const totalSteps = questions.length;
-  const progressPercent = (currentStep / totalSteps) * 100;
-
-  progressBar.style.width = progressPercent + "%";
-  progressText.textContent = `${currentStep} / ${totalSteps}`;
+  const step = currentQuestion + 1;
+  const total = questions.length;
+  progressBar.style.width = (step / total) * 100 + "%";
+  progressText.textContent = `${step} / ${total}`;
 
   current.answers.forEach(answer => {
     const btn = document.createElement("button");
     btn.textContent = answer.text;
 
     btn.addEventListener("click", () => {
-
       document.querySelectorAll("#answers button")
         .forEach(b => b.classList.remove("selected"));
 
       btn.classList.add("selected");
-
       selectedTraits = answer.traits;
       answerSelected = true;
-
       nextBtn.disabled = false;
       nextBtn.style.display = "block";
     });
@@ -270,243 +258,109 @@ function showQuestion() {
   });
 }
 
-
-
-// APPLY TRAITS
-function applyTraits(traitData) {
-  for (let trait in traitData) {
-    traits[trait] += traitData[trait];
-  }
-
-  console.log("Current traits:", traits);
+function applyTraits(data) {
+  for (let t in data) traits[t] += data[t];
 }
 
-// NEXT QUESTION
+// NEXT
 nextBtn.addEventListener("click", () => {
-
   if (!answerSelected) return;
-
   applyTraits(selectedTraits);
-
   currentQuestion++;
-
-  if (currentQuestion < questions.length) {
-    showQuestion();
-  } else {
-    showResult();
-  }
-
+  currentQuestion < questions.length ? showQuestion() : showResult();
 });
 
-// GOD PROFILES
+// GODS
 const gods = [
-  {
-    name: "Thoth",
-    traits: { WIS: 5, CARE: 2 }
-  },
-  {
-    name: "Anubis",
-    traits: { CARE: 5, DEATH: 2 }
-  },
-  {
-    name: "Isis",
-    traits: { CARE: 3, GROW: 3, CHAOS: 2 }
-  },
-  {
-    name: "Osiris",
-    traits: { DEATH: 5, GROW: 2 }
-  },
-  {
-    name: "Seth",
-    traits: { CHAOS: 5, FURY: 2 }
-  },
-  {
-    name: "Sekhmet",
-    traits: { FURY: 5, HONOR: 2 }
-  },
-  {
-    name: "Horus",
-    traits: { HONOR: 5, FURY: 2 }
-  },
-  {
-    name: "Apophis",
-    traits: { DARK: 5, CHAOS: 3 }
-  }
+  { name: "Thoth", traits: { WIS: 5, CARE: 2 }},
+  { name: "Anubis", traits: { CARE: 5, DEATH: 2 }},
+  { name: "Isis", traits: { CARE: 3, GROW: 3, CHAOS: 2 }},
+  { name: "Osiris", traits: { DEATH: 5, GROW: 2 }},
+  { name: "Seth", traits: { CHAOS: 5, FURY: 2 }},
+  { name: "Sekhmet", traits: { FURY: 5, HONOR: 2 }},
+  { name: "Horus", traits: { HONOR: 5, FURY: 2 }},
+  { name: "Apophis", traits: { DARK: 5, CHAOS: 3 }}
 ];
 
-// CALCULATE RESULT
-function calculateGod() {
+// VISUAL DATA
+const godVisuals = {
+  Thoth: { image: "img/thoth.png", color: "#c8b87a" },
+  Anubis: { image: "img/anubis.png", color: "#444" },
+  Isis: { image: "img/isis.png", color: "#7aa6c8" },
+  Osiris: { image: "img/osiris.png", color: "#4a7c59" },
+  Seth: { image: "img/seth.png", color: "#9b3c3c" },
+  Sekhmet: { image: "img/sekhmet.png", color: "#c44536" },
+  Horus: { image: "img/horus.png", color: "#d1a84a" },
+  Apophis: { image: "img/apophis.png", color: "#3b2a4f" }
+};
 
-  let bestMatch = null;
-  let highestScore = -1;
-
-  const maxTraitValue = Math.max(...Object.values(traits));
-
-  gods.forEach(god => {
-
-    let score = 0;
-
-    for (let trait in god.traits) {
-
-      const normalized = traits[trait] / maxTraitValue;
-      score += normalized * god.traits[trait];
-
-    }
-
-    if (score > highestScore) {
-      highestScore = score;
-      bestMatch = god.name;
-    }
-
-  });
-
-  return bestMatch;
-}
-
-// CALCULATED RESULT WITH PERCENTAGE
+// RESULT CALC
 function calculateGodWithPercentages() {
-
-  // Normalize player's traits by the maximum trait value (avoid divide-by-zero)
-  const maxTraitValue = Math.max(...Object.values(traits), 1);
-
-  const normalizedTraits = Object.fromEntries(
-    Object.entries(traits).map(([k, v]) => [k, v / maxTraitValue])
-  );
-
-  // Compute raw scores (dot product between normalized traits and god trait weights)
-  const scores = gods.map(god => {
-    const score = Object.entries(god.traits).reduce((s, [trait, weight]) => {
-      return s + (normalizedTraits[trait] || 0) * weight;
-    }, 0);
-    const maxPossible = Object.values(god.traits).reduce((a, b) => a + b, 0);
-    const matchPercent = maxPossible === 0 ? 0 : (score / maxPossible) * 100;
-    return { name: god.name, score, matchPercent };
+  const max = Math.max(...Object.values(traits), 1);
+  const scores = gods.map(g => {
+    let s = 0;
+    for (let t in g.traits) s += (traits[t] / max) * g.traits[t];
+    return { name: g.name, score: s };
   });
 
-  const total = scores.reduce((s, g) => s + g.score, 0);
-
-  // If there's no information, return zeroed percentages (include matchPercent)
-  if (total === 0) {
-    return scores
-      .map(g => ({ name: g.name, score: g.score, percent: 0, matchPercent: Math.round(g.matchPercent || 0) }))
-      .sort((a, b) => b.score - a.score);
-  }
-
-  // Convert to percentages while ensuring integers sum to 100.
-  const floatPercents = scores.map(g => (g.score / total) * 100);
-  const floored = floatPercents.map(fp => Math.floor(fp));
-  let remainder = 100 - floored.reduce((s, v) => s + v, 0);
-
-  // Distribute remaining percentage points by largest fractional parts
-  const fractions = floatPercents.map((fp, i) => ({ idx: i, frac: fp - Math.floor(fp) }));
-  fractions.sort((a, b) => b.frac - a.frac);
-
-  const finalPercents = floored.slice();
-  for (let i = 0; i < remainder; i++) {
-    finalPercents[fractions[i].idx]++;
-  }
-
-  const results = scores
-    .map((g, i) => ({ name: g.name, score: g.score, percent: finalPercents[i], matchPercent: Math.round(g.matchPercent) }))
-    .sort((a, b) => b.score - a.score);
-
-  return results;
+  const total = scores.reduce((a,b)=>a+b.score,0);
+  return scores
+    .map(g => ({ ...g, percent: Math.round((g.score / total) * 100) }))
+    .sort((a,b)=>b.score-a.score);
 }
 
-// DISPLAY PORCENTAGE
-function displayTraits() {
-
+// TRAITS UI
+function displayTraits(color) {
   traitBreakdown.innerHTML = "";
+  const max = Math.max(...Object.values(traits)) || 1;
 
-  const maxValue = Math.max(...Object.values(traits)) || 1;
-
-  Object.keys(traits).forEach((trait, index) => {
-
-    const percent = Math.round((traits[trait] / maxValue) * 100);
-
-    // Row container
+  Object.keys(traits).forEach((t,i)=>{
+    const pct = Math.round((traits[t]/max)*100);
     const row = document.createElement("div");
-    row.classList.add("trait-row");
-
-    // Label
-    const label = document.createElement("div");
-    label.classList.add("trait-label");
-    label.textContent = `${trait} — ${percent}%`;
-
-    // Bar container
-    const barContainer = document.createElement("div");
-    barContainer.classList.add("trait-bar");
-
-    // Fill bar
-    const barFill = document.createElement("div");
-    barFill.classList.add("trait-fill");
-
-    barContainer.appendChild(barFill);
-
-    row.appendChild(label);
-    row.appendChild(barContainer);
-
+    row.className = "trait-row";
+    row.innerHTML = `
+      <div class="trait-label">${t} — ${pct}%</div>
+      <div class="trait-bar">
+        <div class="trait-fill" style="background:${color}; width:0"></div>
+      </div>`;
     traitBreakdown.appendChild(row);
-
-    // Animate (staggered)
-    setTimeout(() => {
-      barFill.style.width = percent + "%";
-    }, index * 150);
-
+    setTimeout(()=>row.querySelector(".trait-fill").style.width=pct+"%",i*120);
   });
 }
-
-
 
 // RESULT SCREEN
 function showResult() {
-
   quizScreen.classList.remove("active");
+  startScreen.classList.remove("active"); // seguridad
+  document.getElementById("app").style.display = "none"; // 👈 ESTA ES LA CLAVE
+
   resultScreen.classList.add("active");
 
   const results = calculateGodWithPercentages();
+  const main = results[0];
+  const visual = godVisuals[main.name];
 
-  const mainGod = results[0];
-  const secondGod = results[1] || { name: "—", matchPercent: 0 };
+  document.getElementById("godImage").src = visual.image;
+  document.getElementById("godName").textContent = main.name;
+  document.getElementById("godDescription").textContent =
+    "Your choices reflect the essence of " + main.name + ".";
 
-  resultText.innerHTML = `
-    <strong>Your Fate Has Been Decided</strong><br><br>
-
-    Primary Alignment:<br>
-    <span style="color:#caa36a">${mainGod.name}</span> — ${mainGod.matchPercent}%<br><br>
-
-    Secondary Influence:<br>
-    ${secondGod.name} — ${secondGod.matchPercent || 0}%
-  `;
-
-  console.log("FINAL TRAITS:", traits);
-  console.log("FINAL GOD:", mainGod.name);
-
-  displayTraits();
+  displayTraits(visual.color);
 }
-
 
 
 
 // RESTART
 restartBtn.addEventListener("click", () => {
-
   currentQuestion = 0;
-
-  traits = {
-    WIS: 0,
-    CARE: 0,
-    DEATH: 0,
-    GROW: 0,
-    CHAOS: 0,
-    FURY: 0,
-    HONOR: 0,
-    DARK: 0
-  };
+  traits = Object.fromEntries(Object.keys(traits).map(k => [k, 0]));
 
   resultScreen.classList.remove("active");
+  document.getElementById("app").style.display = "block"; // 👈 vuelve el contenedor
+
   startScreen.classList.add("active");
 });
+
 
 
 
