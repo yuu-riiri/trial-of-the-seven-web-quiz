@@ -294,6 +294,18 @@ const godVisuals = {
   Apophis: { image: "img/apophis.png", color: "#3b2a4f" }
 };
 
+// Editable lore map: replace the placeholder strings with your actual lore per god.
+const godLore = {
+  Thoth: "Thoth is the god of wisdom and knowledge. He taught the first EFNFs how to read, write, created the modern calendar still used by subjects of Ra. A follower of Thoth has the ability to control water, access to the archive of primordial knowledge, and foresight/can foretell prophecies or possible future events.",
+  Anubis: "Anubis is the god of embalming and funeral ceremony. He taught EFNFs the importance of honoring the dead, and would guide the spirits of the deceased into the afterlife. A follower of Anubis is able to heal others, can communicate to the deceased, can raise and guide souls of the deceased.",
+  Isis: "Isis is the goddess of healing, fertility, and motherhood. As the divine mother of the realm, she is fierce in her protection and there are no limits to the lengths she will go to in order to protect her subjects. A follower of Isis has the ability to cast healing incantations and spells, and the ability to manipulate plant life; whether it is to bloom a basket of roses for a loved one, or to ensnare one’s enemies in a net of thorns.",
+  Osiris: "Osiris is god of the terre, the dead, and resurrection. He is ruler of the underworld, also known as Duat, and ensures the soles of the deceased are well kept after they’ve passed on and have been judged against the feather of Ma’at. A follower of Osiris has the ability to self regenerate/self heal injuries over time, ability to make objects wither/decay, can open cracks in the planet leading to the Duat.",
+  Seth: "Seth is the god of the desert, violence, and disorder. He often instigates skirmishes and fights among the gods, and spins dark storms of sand for his own entertainment.  A follower of Seth retains his affinity for being an impeccable strategist, and spectator of chaos. They also possess his strength in battle with the ability to summon spears, and kopesh blades made of Seth’s cursed, blood soaked sand.",
+  Sekhmet: "Sekhmet is the goddess of war and vengeance. She craves destruction like a merciless wildfire. Of The Seven, she remains the most ferocious and blood thirsty, and is known as the flame in the eyes of Ra— yearning for war and the leveling of her enemies. n order to satiate her thirst for war, she journeys aboard Ra’s sun boat. A Follower of Sekhmet may not carry her constant drive for blood, but when pushed to their emotional limits, the goddess’ divine flames erupt from the follower’s soul and envelops their body. In this enraged state, a Follower can breathe the goddess’ fire, and summon three flaming lionesses to aid in battle.",
+  Horus: "Horus is lord of the sky, and god of victory. As lord of the sky, Horus is able to generate monstrous storms with a mere beat of his wings, directs the flow of the desert wind and the jet streams about the realm. A Follower of Horus has the ability to harness the majesty of the sky: manipulating the winds and generating storms. They are much more adept fliers than the regular EFNF, possessing enhanced speed and manoeuvrability, can morph into a giant falcon of light.",
+  Apophis: "Are u ok?"
+};
+
 // RESULT CALC
 function calculateGodWithPercentages() {
   const max = Math.max(...Object.values(traits), 1);
@@ -331,9 +343,8 @@ function displayTraits(color) {
 // RESULT SCREEN
 function showResult() {
   quizScreen.classList.remove("active");
-  startScreen.classList.remove("active"); // seguridad
-  document.getElementById("app").style.display = "none"; // 👈 ESTA ES LA CLAVE
-
+  startScreen.classList.remove("active"); 
+  document.getElementById("app").style.display = "none"; 
   resultScreen.classList.add("active");
 
   const results = calculateGodWithPercentages();
@@ -344,6 +355,13 @@ function showResult() {
   document.getElementById("godName").textContent = main.name;
   document.getElementById("godDescription").textContent =
     "Your choices reflect the essence of " + main.name + ".";
+
+  // Populate lore panel with god-specific text. Edit `godLore` above to change content.
+  const loreText = godLore[main.name] || "";
+  const loreTitleEl = document.getElementById("lore-title");
+  if (loreTitleEl) loreTitleEl.textContent = main.name + " Chronicle";
+  const loreTextEl = document.getElementById("lore-text");
+  if (loreTextEl) loreTextEl.textContent = loreText;
 
   displayTraits(visual.color);
 }
@@ -356,7 +374,7 @@ restartBtn.addEventListener("click", () => {
   traits = Object.fromEntries(Object.keys(traits).map(k => [k, 0]));
 
   resultScreen.classList.remove("active");
-  document.getElementById("app").style.display = "block"; // 👈 vuelve el contenedor
+  document.getElementById("app").style.display = "block"; 
 
   startScreen.classList.add("active");
 });
