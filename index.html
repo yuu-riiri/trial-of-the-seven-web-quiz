@@ -3,63 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <title>Trial of the Seven</title>
-
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+  <!-- MAIN APP (START + QUIZ) -->
   <div id="app">
 
-  <!-- START SCREEN -->
-  <div id="start-screen" class="screen active">
+    <!-- START SCREEN -->
+    <div id="start-screen" class="screen active">
+      <h1>Trial of the Seven</h1>
+      <p>You stand before the ancient gates. Your choices will shape your fate.</p>
+      <button id="start-btn">Begin Trial</button>
+    </div>
 
-    <h1>Trial of the Seven</h1>
-    <p>You stand before the ancient gates. Your choices will shape your fate.</p>
+    <!-- QUIZ SCREEN -->
+    <div id="quiz-screen" class="screen">
 
-    <button id="start-btn">Begin Trial</button>
+      <div id="progress-wrapper">
+        <div id="progress-container">
+          <div id="progress-bar"></div>
+        </div>
+        <span id="progress-text"></span>
+      </div>
+
+      <h2 id="question-text">Question goes here</h2>
+
+      <div id="answers"></div>
+      <button id="next-btn" disabled>Next</button>
+
+    </div>
 
   </div>
 
-  <!-- QUIZ SCREEN -->
-  <div id="quiz-screen" class="screen">
-
-  <div id="progress-wrapper">
-  <div id="progress-container">
-    <div id="progress-bar"></div>
-  </div>
-  <span id="progress-text"></span>
-</div>
-
-
-  <h2 id="question-text">Question goes here</h2>
-
-  <div id="answers"></div>
-  <button id="next-btn" disabled>Next</button>
-
-</div>
-
-
-  <!-- RESULT SCREEN -->
+  <!-- RESULT SCREEN (SEPARATE FROM APP) -->
   <div id="result-screen" class="screen">
 
-    <h2>Your Fate</h2>
-    <div id="result-text"></div>
+  <div id="result-layout">
 
+    <!-- LEFT: TRAITS -->
     <div id="trait-breakdown"></div>
 
+    <!-- CENTER: GOD + BUTTON -->
+    <div id="god-column">
 
-    <button id="restart-btn">Retry Trial</button>
+      <div id="god-card">
+        <img id="godImage" src="" alt="God Image">
+        <h3>YOU WALK THE PATH OF</h3>
+        <h2 id="godName"></h2>
+        <p id="godDescription"></p>
+      </div>
+
+      <button id="restart-btn" class="retry-btn">Retry Trial</button>
+
+    </div>
 
   </div>
 
 </div>
+
+
+  <script src="script.js"></script>
+
 </body>
-</div>
-
-<script src="script.js"></script>
-
-</body>
-</html>
-
 </html>
