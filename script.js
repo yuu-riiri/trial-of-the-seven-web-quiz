@@ -36,6 +36,18 @@ let traits = {
   DARK: 0
 };
 
+// TRAIT DISPLAY NAMES
+const traitDisplayNames = {
+  WIS: "Wisdom",
+  CARE: "Care",
+  DEATH: "Fate",
+  GROW: "Growth",
+  CHAOS: "Chaos",
+  FURY: "Fury",
+  HONOR: "Honor",
+  DARK: "Darkness"
+};
+
 
 // QUESTIONS 
 const questions = [
@@ -227,8 +239,7 @@ startBtn.addEventListener("click", () => {
 function showQuestion() {
   answerSelected = false;
   selectedTraits = null;
-  nextBtn.disabled = true;
-  nextBtn.style.display = "none";
+  nextBtn.classList.remove("enabled");
   answersContainer.innerHTML = "";
 
   const current = questions[currentQuestion];
@@ -250,8 +261,7 @@ function showQuestion() {
       btn.classList.add("selected");
       selectedTraits = answer.traits;
       answerSelected = true;
-      nextBtn.disabled = false;
-      nextBtn.style.display = "block";
+      nextBtn.classList.add("enabled");
     });
 
     answersContainer.appendChild(btn);
@@ -352,11 +362,12 @@ function displayTraits(gradient) {
   const max = Math.max(...Object.values(traits)) || 1;
 
   Object.keys(traits).forEach((t,i)=>{
+    const displayName = traitDisplayNames[t] || t;
     const pct = Math.round((traits[t]/max)*100);
     const row = document.createElement("div");
     row.className = "trait-row";
     row.innerHTML = `
-      <div class="trait-label">${t} — ${pct}%</div>
+      <div class="trait-label">${displayName} — ${pct}%</div>
       <div class="trait-bar">
         <div class="trait-fill" style="background:${gradient}; width:0"></div>
       </div>`;
@@ -402,6 +413,13 @@ function showResult() {
     godNameEl.style.color = "transparent";
     godNameEl.style.display = "inline-block";
   }
+
+  // Change background for Apophis
+  if (main.name === "Apophis") {
+    document.body.style.backgroundImage = 'radial-gradient(circle at top, rgba(20,20,20,0.45), rgba(8,8,8,0.65)), url("img/apophis-background.png")';
+  } else {
+    document.body.style.backgroundImage = 'radial-gradient(circle at top, rgba(20,20,20,0.45), rgba(8,8,8,0.65)), url("img/ra-background.png")';
+  }
 }
 
 
@@ -420,6 +438,9 @@ restartBtn.addEventListener("click", () => {
     godNameEl.style.color = "";
     godNameEl.style.display = "";
   }
+
+  // Reset background to default
+  document.body.style.backgroundImage = 'radial-gradient(circle at top, rgba(20,20,20,0.45), rgba(8,8,8,0.65)), url("img/ra-background.png")';
 
   resultScreen.classList.remove("active");
   document.getElementById("app").style.display = "block"; 
