@@ -2,13 +2,15 @@
    GLOBAL BASE
 ========================= */
 
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600&family=Dancing+Script:wght@400;700&family=Lato:wght@300;400;700&family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600;700&family=Roboto:wght@400;700&family=Spectral:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600&display=swap');
+
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Source Sans Pro', sans-serif;
   color: #f5f5f5;
 
   display: flex;
@@ -21,7 +23,7 @@ body {
 
   background-image:
     radial-gradient(circle at top, rgba(20,20,20,0.45), rgba(8,8,8,0.65)),
-    url("img/anubis-background.png");
+    url("img/ra-background.png");
 
   background-size: cover;
   background-position: center;
@@ -38,6 +40,80 @@ body {
   --lore-gradient: linear-gradient(180deg, rgba(16,16,24,var(--container-bg-alpha)), rgba(8,8,12,var(--container-bg-alpha)));
   --card-gradient: linear-gradient(135deg, rgba(42,47,74,var(--container-bg-alpha)), rgba(27,32,53,var(--container-bg-alpha)));
   --progress-panel-bg: rgba(28,28,28,0.6);
+  --accent-gradient: linear-gradient(90deg, #FFBA72, #986CB7);
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 5px rgba(152,108,183,0.5); }
+  50% { box-shadow: 0 0 20px rgba(152,108,183,0.8); }
+  100% { box-shadow: 0 0 5px rgba(152,108,183,0.5); }
+}
+
+@keyframes titleGlow {
+  0% { text-shadow: 2px 2px 4px rgba(0,0,0,0.7); }
+  50% { text-shadow: 2px 2px 8px rgba(255,186,114,0.5), 2px 2px 4px rgba(0,0,0,0.7); }
+  100% { text-shadow: 2px 2px 4px rgba(0,0,0,0.7); }
+}
+
+/* =========================
+   TYPOGRAPHY
+========================= */
+
+h1, h2, h3 {
+  font-family: 'Crimson Text', serif;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+
+h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 4rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+  position: relative;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+  animation: titleGlow 3s infinite;
+}
+
+h1::before {
+  content: "";
+  position: absolute;
+  top: -70px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 80px;
+  background-image: url("img/eye-of-horus.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+h2 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+p {
+  line-height: 1.7;
+  font-weight: 300;
 }
 
 
@@ -60,10 +136,26 @@ body {
 
 .screen {
   display: none;
+  animation: fadeIn 0.8s ease-out;
 }
 
 .screen.active {
   display: block;
+}
+
+/* =========================
+   START SCREEN
+========================= */
+
+#start-screen {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+#start-screen p {
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  color: #ddd;
 }
 
 /* =========================
@@ -81,16 +173,34 @@ button {
   cursor: pointer;
   font-size: 15px;
   letter-spacing: 0.5px;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  font-family: 'Montserrat', sans-serif;
 }
 
 button:hover {
   background: linear-gradient(135deg, #3a3a3a, #222);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  animation: glow 2s infinite;
 }
 
 button:active {
   transform: scale(0.98);
+}
+
+/* =========================
+   QUIZ SCREEN
+========================= */
+
+#quiz-screen {
+  padding: 20px;
+}
+
+#question-text {
+  margin-bottom: 20px;
+  color: #FFBA72;
+  text-align: center;
+  font-family: 'Spectral', serif;
+  font-weight: 600;
 }
 
 /* =========================
@@ -102,10 +212,26 @@ button:active {
 }
 
 #answers button.selected {
-  background: linear-gradient(90deg, #c9a23f, #f5d76e);
+  background: var(--accent-gradient);
   color: #000;
   transform: scale(1.03);
-  box-shadow: 0 0 12px rgba(201,162,63,0.5);
+  box-shadow: 0 0 12px rgba(152,108,183,0.5);
+}
+
+/* =========================
+   NEXT BUTTON
+========================= */
+
+#next-btn {
+  opacity: 0.5;
+  pointer-events: none;
+  transition: opacity 0.3s ease, box-shadow 0.3s ease;
+}
+
+#next-btn.enabled {
+  opacity: 1;
+  pointer-events: auto;
+  box-shadow: 0 0 15px rgba(152,108,183,0.6);
 }
 
 /* =========================
@@ -127,7 +253,7 @@ button:active {
 #progress-bar {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #c9a23f, #f5d76e);
+  background: var(--accent-gradient);
   transition: width 0.4s ease;
 }
 
@@ -153,10 +279,6 @@ button:active {
   justify-content: center;
 }
 
-#result-screen.active {
-  width: 100%;
-}
-
 /* Main horizontal layout */
 
 #result-layout {
@@ -169,6 +291,7 @@ button:active {
   width: 100%;
   max-width: 500px;
   padding: 0 15px;
+  animation: slideIn 1s ease-out;
 }
 
 /* =========================
@@ -211,7 +334,7 @@ button:active {
 .trait-fill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #c9a23f, #f5d76e);
+  background: var(--accent-gradient);
   border-radius: 10px;
   transition: width 1.2s ease-out;
 }
@@ -242,12 +365,14 @@ button:active {
   text-align: center;
   box-shadow: 0 0 30px rgba(0,0,0,0.7);
   overflow: visible;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 
 
 #god-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.9);
 }
 
 /* =========================
@@ -264,6 +389,7 @@ button:active {
   z-index: 5;
   pointer-events: none;
   filter: drop-shadow(0 18px 30px rgba(0,0,0,0.9));
+  object-fit: cover;
 }
 
 /* =========================
@@ -272,8 +398,9 @@ button:active {
 
 #god-card h2 {
   margin: 0;
-  font-size: 24px;
+  font-size: 48px;
   letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 /* Reserved description area */
@@ -290,6 +417,12 @@ button:active {
    LORE PANEL (RIGHT)
 ========================= */
 
+#right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
 #lore-panel {
   width: 100%;
   max-width: 350px;
@@ -298,21 +431,18 @@ button:active {
   border-radius: 16px;
   box-shadow: 0 0 18px rgba(0,0,0,0.6);
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
   height: auto;
 }
 
 /* Lore title */
 
-#lore-panel h3 {
-  margin: 0 0 12px;
-  font-size: 15px;
+#lore-title {
+  margin: 0;
+  font-size: 24px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: #f5d76e;
+  color: #FFBA72;
+  text-align: center;
 }
 
 /* Lore text */
@@ -322,6 +452,8 @@ button:active {
   line-height: 1.7;
   color: #cfcfcf;
   opacity: 0.9;
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
 }
 
 /* =========================
@@ -360,7 +492,7 @@ button:active {
   }
 
   #trait-breakdown,
-  #lore-panel {
+  #right-column {
     flex: 0 0 280px;
     height: 100%;
   }
