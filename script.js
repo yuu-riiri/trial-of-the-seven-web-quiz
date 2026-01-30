@@ -284,15 +284,40 @@ const gods = [
 
 // VISUAL DATA
 const godVisuals = {
-  Thoth: { image: "img/thoth.png", color: "#c8b87a" },
-  Anubis: { image: "img/anubis.png", color: "#444" },
-  Isis: { image: "img/isis.png", color: "#7aa6c8" },
-  Osiris: { image: "img/osiris.png", color: "#4a7c59" },
-  Seth: { image: "img/seth.png", color: "#9b3c3c" },
-  Sekhmet: { image: "img/sekhmet.png", color: "#c44536" },
-  Horus: { image: "img/horus.png", color: "#d1a84a" },
-  Apophis: { image: "img/apophis.png", color: "#3b2a4f" }
+  Thoth: {
+    image: "img/thoth.png",
+    gradient: "linear-gradient(90deg, #05153c , #4192a1)"
+  },
+  Anubis: {
+    image: "img/anubis.png",
+    gradient: "linear-gradient(90deg, #4c9cf8, #fabb78)"
+  },
+  Isis: {
+    image: "img/isis.png",
+    gradient: "linear-gradient(90deg, #e7698a, #eba598)"
+  },
+  Osiris: {
+    image: "img/osiris.png",
+    gradient: "linear-gradient(90deg, #122025, #3d545e)"
+  },
+  Seth: {
+    image: "img/seth.png",
+    gradient: "linear-gradient(90deg, #32141b, #1d133c)"
+  },
+  Sekhmet: {
+    image: "img/sekhmet.png",
+    gradient: "linear-gradient(90deg, #ed8c5f, #a44855)"
+  },
+  Horus: {
+    image: "img/horus.png",
+    gradient: "linear-gradient(90deg, #b2cbe3, #e7f4f5)"
+  },
+  Apophis: {
+    image: "img/apophis.png",
+    gradient: "linear-gradient(90deg, #16157f, #a71431)"
+  }
 };
+
 
 // Editable lore map: replace the placeholder strings with your actual lore per god.
 const godLore = {
@@ -322,7 +347,7 @@ function calculateGodWithPercentages() {
 }
 
 // TRAITS UI
-function displayTraits(color) {
+function displayTraits(gradient) {
   traitBreakdown.innerHTML = "";
   const max = Math.max(...Object.values(traits)) || 1;
 
@@ -333,7 +358,7 @@ function displayTraits(color) {
     row.innerHTML = `
       <div class="trait-label">${t} — ${pct}%</div>
       <div class="trait-bar">
-        <div class="trait-fill" style="background:${color}; width:0"></div>
+        <div class="trait-fill" style="background:${gradient}; width:0"></div>
       </div>`;
     traitBreakdown.appendChild(row);
     setTimeout(()=>row.querySelector(".trait-fill").style.width=pct+"%",i*120);
@@ -363,7 +388,20 @@ function showResult() {
   const loreTextEl = document.getElementById("lore-text");
   if (loreTextEl) loreTextEl.textContent = loreText;
 
-  displayTraits(visual.color);
+  // Apply the god's gradient to the trait fills and (optionally) the top progress bar
+  const gradient = visual.gradient || visual.color || "linear-gradient(90deg, #c9a23f, #f5d76e)";
+  displayTraits(gradient);
+  if (progressBar) progressBar.style.background = gradient;
+
+  // Apply gradient fill to the god name text
+  const godNameEl = document.getElementById("godName");
+  if (godNameEl) {
+    godNameEl.style.background = gradient;
+    godNameEl.style.webkitBackgroundClip = "text";
+    godNameEl.style.backgroundClip = "text";
+    godNameEl.style.color = "transparent";
+    godNameEl.style.display = "inline-block";
+  }
 }
 
 
@@ -372,6 +410,16 @@ function showResult() {
 restartBtn.addEventListener("click", () => {
   currentQuestion = 0;
   traits = Object.fromEntries(Object.keys(traits).map(k => [k, 0]));
+
+  // Reset any gradient text styles applied to godName
+  const godNameEl = document.getElementById("godName");
+  if (godNameEl) {
+    godNameEl.style.background = "";
+    godNameEl.style.webkitBackgroundClip = "";
+    godNameEl.style.backgroundClip = "";
+    godNameEl.style.color = "";
+    godNameEl.style.display = "";
+  }
 
   resultScreen.classList.remove("active");
   document.getElementById("app").style.display = "block"; 
