@@ -414,6 +414,15 @@ function showResult() {
     godNameEl.style.display = "inline-block";
   }
 
+  // Apply gradient border to lore panel
+  const lorePanelEl = document.getElementById("lore-panel");
+  if (lorePanelEl) {
+    const root = getComputedStyle(document.documentElement);
+    const loreGradient = root.getPropertyValue('--lore-gradient').trim();
+    lorePanelEl.style.background = `${loreGradient} padding-box, ${gradient} border-box`;
+    lorePanelEl.style.backgroundClip = "padding-box, border-box";
+  }
+
   // Change background for Apophis
   if (main.name === "Apophis") {
     document.body.style.backgroundImage = 'radial-gradient(circle at top, rgba(20,20,20,0.45), rgba(8,8,8,0.65)), url("img/apophis-background.png")';
