@@ -109,6 +109,7 @@ h3 {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
+  font-family: 'Spectral', serif;
 }
 
 p {
@@ -156,6 +157,8 @@ p {
   font-size: 1.1rem;
   margin-bottom: 30px;
   color: #ddd;
+  font-family: 'Spectral', serif;
+  font-weight: 600;
 }
 
 /* =========================
@@ -226,12 +229,15 @@ button:active {
   opacity: 0.5;
   pointer-events: none;
   transition: opacity 0.3s ease, box-shadow 0.3s ease;
+  margin-top: 40px;
+  background: linear-gradient(135deg, #2b2b2b, #1a1a1a);
 }
 
 #next-btn.enabled {
   opacity: 1;
   pointer-events: auto;
   box-shadow: 0 0 15px rgba(152,108,183,0.6);
+  background: linear-gradient(135deg, #3a3a3a, #222);
 }
 
 /* =========================
@@ -396,16 +402,24 @@ button:active {
    GOD TEXT AREA
 ========================= */
 
+#god-card h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
 #god-card h2 {
   margin: 0;
-  font-size: 48px;
+  font-size: 42px;
   letter-spacing: 1px;
   text-transform: uppercase;
+  font-weight: 600;
+  font-family: 'Spectral', serif;
 }
 
 /* Reserved description area */
 
 #god-description {
+  font-family: 'Spectral', serif;
   margin-top: 14px;
   font-size: 14px;
   line-height: 1.6;
@@ -426,11 +440,12 @@ button:active {
 #lore-panel {
   width: 100%;
   max-width: 350px;
-  background: var(--lore-gradient);
+  background: var(--lore-gradient) padding-box, linear-gradient(90deg, #05153c, #4192a1) border-box;
   padding: 20px;
   border-radius: 16px;
   box-shadow: 0 0 18px rgba(0,0,0,0.6);
-
+  border: 4px solid transparent;
+  background-clip: padding-box, border-box;
   height: auto;
 }
 
@@ -452,7 +467,7 @@ button:active {
   line-height: 1.7;
   color: #cfcfcf;
   opacity: 0.9;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Spectral', serif;
   font-weight: 400;
 }
 
@@ -477,6 +492,13 @@ button:active {
 /* =========================
    RESPONSIVE DESIGN
 ========================= */
+
+/* Mobile: below 768px */
+@media (max-width: 767px) {
+  body {
+    background-position: top center;
+  }
+}
 
 /* Tablet and up: 768px and above */
 @media (min-width: 768px) {

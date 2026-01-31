@@ -89,7 +89,6 @@ const questions = [
       { text: "Suppress it and think rationally", traits: { WIS: 2, DEATH : 2 } },
       { text: "Talk it out", traits: { CARE: 2 } },
       { text: "Channel it into productivity", traits: { GROW : 1, HONOR : 1 } },
-      { text: "Fortifying it for future wars", traits: { HONOR: 1, FURY: 1 } },
       { text: "Release it explosively", traits: { FURY: 1} }        
     ]
   },
@@ -412,6 +411,23 @@ function showResult() {
     godNameEl.style.backgroundClip = "text";
     godNameEl.style.color = "transparent";
     godNameEl.style.display = "inline-block";
+    
+    // Create aura with god's colors
+    const colors = gradient.match(/#[0-9a-fA-F]{6}/g) || [];
+    if (colors.length >= 2) {
+      godNameEl.style.textShadow = `1px 1px 3px ${colors[0]}80, 2px 2px 6px ${colors[1]}60`;
+    } else {
+      godNameEl.style.textShadow = "1px 1px 3px rgba(255,255,255,0.5), 2px 2px 6px rgba(255,255,255,0.3)";
+    }
+  }
+
+  // Apply gradient border to lore panel
+  const lorePanelEl = document.getElementById("lore-panel");
+  if (lorePanelEl) {
+    const root = getComputedStyle(document.documentElement);
+    const loreGradient = root.getPropertyValue('--lore-gradient').trim();
+    lorePanelEl.style.background = `${loreGradient} padding-box, ${gradient} border-box`;
+    lorePanelEl.style.backgroundClip = "padding-box, border-box";
   }
 
   // Change background for Apophis
@@ -437,6 +453,7 @@ restartBtn.addEventListener("click", () => {
     godNameEl.style.backgroundClip = "";
     godNameEl.style.color = "";
     godNameEl.style.display = "";
+    godNameEl.style.textShadow = "";
   }
 
   // Reset background to default
