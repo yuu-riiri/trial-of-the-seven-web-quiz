@@ -223,7 +223,45 @@ const questions = [
       { text: "Harry Potter and the Prisoner of Azkaban", traits: { WIS: 2 } },
       { text: "Kung Fu Panda 2", traits: { FURY: 1, DARK: 2 } },
     ]
-}
+},
+
+{
+    question: "As a growing young dragon, you get ready to embark on a journey to Thoth’s region so you may obtain an education. What do you pack with you?",
+    answers: [
+      { text: "A brand new scroll of the Book of the Dead: you never know when you’re going to die", traits: { DEATH: 2, CARE: 1 } },
+      { text: "Extra blank papyrus scrolls and reed brushes all meticulously and obsessively color coded and tabbed: it’s never a bad idea to come to class extra prepared", traits: { WIS: 2} },
+      { text: "A pair of aerial goggles: what if you’re flying and get bugs and sand in your eyes?", traits: { HONOR: 1 } },
+      { text: "An amulet of protection: when going to a new place, you should always have a way to protect yourself from bad spirits and energies", traits: { HONOR: 1, GROW: 2 } },
+      { text: "I don’t need to pack I’ll just figure it out when I get there", traits: { CHAOS: 2, FURY: 3 } },
+      { text: "Extra gems and gold: for souvenirs, or if ever in an emergency, you’ll be able to afford extra resources", traits: { CARE: 2 } },
+      { text: "Extra accessories, linens, and self care items: a good, well crafted impression is a lasting impression", traits: { CHAOS: 1, HONOR: 2 } },
+    ]
+},
+
+{
+    question: "After a long flight from home, you finally reach the region of Thoth and arrive at the god’s temple, ready to pick subjects to study. What subject piques your interest the most?",
+    answers: [
+      { text: "Subject of medicine, healing, and botany", traits: { CARE: 2,DEATH: 2 } },
+      { text: "Subject of social and political rhetoric and language", traits: { WIS: 2, CHAOS: 2 } },
+      { text: "Subject of precious gems and metal-smithing", traits: { FURY: 1, GROW: 1 } },
+      { text: "Subject of law and justice", traits: { HONOR: 1, DEATH: 1 } },
+      { text: "Subject of myths, and histories", traits: { WIS: 1, GROW: 1 } },
+      { text: "Subject of celestial and geographic navigation ", traits: { WIS: 1, HONOR: 1 } },
+      { text: "Subject of the arts of aerial combat", traits: { FURY: 2, HONOR: 2 } },
+    ]
+},
+
+{
+    question: "After a long day of attending your subjects, how do you choose to spend the rest of your day?",
+    answers: [
+      { text: "Stay after class to get to know your professors and make a good, lasting impression: you never know when a good connection can come in handy later down the road", traits: { CHAOS: 2, CARE: 2 } },
+      { text: "Retire to your newly assigned room for the season and take a nap", traits: { CARE: 1, GROW: 1 } },
+      { text: "Head to the temple’s grand library and begin hitting the books: you plan on being the best and strongest student here ", traits: { FURY: 1, WIS: 2 } },
+      { text: "Spontaneously take a flight around campus and explore the area: you’re in a new region and there’s so many new things to see and experience", traits: { HONOR: 2, CHAOS: 1 } },
+      { text: "Attend a social gathering in the tombs: you want to celebrate this new chapter of life, and meet other dragons who are also beginning their studies ", traits: { DEATH: 2, GROW: 1 } },
+      { text: "Blow off some steam and enter a club for aerial combat: getting some physical exercise is a great way to decompress ", traits: { FURY: 2, HONOR: 1 } },
+    ]
+},
 ];
 
 let currentQuestion = 0;
@@ -295,7 +333,7 @@ const gods = [
 const godVisuals = {
   Thoth: {
     image: "img/thoth.png",
-    gradient: "linear-gradient(90deg, #05153c , #4192a1)"
+    gradient: "linear-gradient(90deg, #2045a1 , #3dc8e0)"
   },
   Anubis: {
     image: "img/anubis.png",
@@ -307,11 +345,11 @@ const godVisuals = {
   },
   Osiris: {
     image: "img/osiris.png",
-    gradient: "linear-gradient(90deg, #122025, #3d545e)"
+    gradient: "linear-gradient(90deg, #4a7c8a, #7fa9b3)"
   },
   Seth: {
     image: "img/seth.png",
-    gradient: "linear-gradient(90deg, #32141b, #1d133c)"
+    gradient: "linear-gradient(90deg, #8b3a4a, #6b4a7f)"
   },
   Sekhmet: {
     image: "img/sekhmet.png",
@@ -323,7 +361,7 @@ const godVisuals = {
   },
   Apophis: {
     image: "img/apophis.png",
-    gradient: "linear-gradient(90deg, #16157f, #a71431)"
+    gradient: "linear-gradient(90deg, #1c19ad, #ca2546)"
   }
 };
 
